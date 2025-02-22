@@ -5,6 +5,7 @@ import (
 
 	"github.com/niteshswarnakar/task_manager/internal/infrastructure/database"
 	"github.com/niteshswarnakar/task_manager/internal/lib"
+	"github.com/niteshswarnakar/task_manager/internal/logger"
 	"github.com/niteshswarnakar/task_manager/internal/model"
 	"gorm.io/gorm"
 )
@@ -13,11 +14,12 @@ type Consumer struct {
 	consumerId int
 	db         *gorm.DB
 	queue      lib.Queue[model.Task]
+	logger     logger.AppLogger
 }
 
 func (c Consumer) PerformTask() {
 	for {
-		fmt.Println("Task started by consumer", c.consumerId)
+		c.logger.Info(fmt.Sprintf("Task started by consumer %v", c.consumerId))
 		task := c.queue.Get()
 
 		_, err := database.First[model.Task](c.db, task.ID)
@@ -32,11 +34,12 @@ func (c Consumer) PerformTask() {
 	}
 }
 
-func NewConsumer(consumerId int, db *gorm.DB, queue lib.Queue[model.Task]) Consumer {
-	fmt.Println("Consumer created with id", consumerId)
+func NewConsumer(consumerId int, db *gorm.DB, queue lib.Queue[model.Task], logger logger.AppLogger) Consumer {
+	logger.Info(fmt.Sprintf("Consumer created with id %v", consumerId))
 	return Consumer{
 		consumerId: consumerId,
 		db:         db,
 		queue:      queue,
+		logger:     logger,
 	}
 }
