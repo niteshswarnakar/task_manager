@@ -1,11 +1,7 @@
 package main
 
-import "fmt"
+import "github.com/niteshswarnakar/task_manager/cmd"
 
 func main() {
-	Hello()
-}
-
-func Hello() {
-	fmt.Println("Task Manager function")
+	cmd.Execute()
 }

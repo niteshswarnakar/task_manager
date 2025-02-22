@@ -1,2 +1,2 @@
 run:
-	go run main.go
+	go build | go install | task_manager
