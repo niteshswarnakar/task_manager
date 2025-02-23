@@ -57,7 +57,7 @@ func (c Consumer) PerformTask() {
 
 func StartWorkerPool(db *gorm.DB, queue lib.Queue[model.Task], logger logger.AppLogger, stopChan chan struct{}) {
 	for i := 0; i < constants.NumberOfConsumer; i++ {
-		consumerId := i
+		consumerId := i + 1
 		consumerObj := NewConsumer(consumerId, db, queue, logger, stopChan)
 		go consumerObj.PerformTask()
 	}

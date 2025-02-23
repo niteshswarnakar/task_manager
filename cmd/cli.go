@@ -5,7 +5,9 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/aquasecurity/table"
 	"github.com/niteshswarnakar/task_manager/internal/cli"
 	"github.com/niteshswarnakar/task_manager/internal/constants.go"
 	"github.com/niteshswarnakar/task_manager/internal/infrastructure/database"
@@ -57,10 +59,22 @@ func init() {
 			if err != nil {
 				appLogger.Error("Cli: List Command: Find all tasks", err)
 			}
+
+			display := table.New(os.Stdout)
+			display.SetRowLines(false)
+			display.SetHeaders("ID", "Title", "Status", "Created At")
+
+			// pending emoji
 			for _, task := range tasks {
-				// TODO : SHOW THESE DATA IN TABLE
-				appLogger.Info(fmt.Sprintf("%s - %s", task.Title, task.Status))
+				status := "⏳"
+				if task.Status == model.StatusCompleted {
+					status = "✅"
+				}
+				display.AddRow(task.ID, task.Title, string(fmt.Sprintf("%s %s", status, string(task.Status))), task.CreatedAt.Format("2006-01-02 15:04:05"))
+				// appLogger.Info(fmt.Sprintf("%s - %s", task.Title, task.Status))
 			}
+
+			display.Render()
 		},
 	}
 
