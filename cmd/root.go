@@ -11,8 +11,8 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "task_manager",
-	Short: "A brief description of your application",
-	Long:  `A longer description that spans multiple lines and likely contains`,
+	Short: "This is a task manager application based on golang that can be run in both cli and api mode",
+	Long:  `This is a task manager application based on golang that can be run in both cli and api mode.`,
 }
 
 func Execute() {

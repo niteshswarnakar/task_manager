@@ -8,7 +8,7 @@ import (
 
 type AppLogger interface {
 	Info(string)
-	Error(error)
+	Error(string, error)
 	Debug(string)
 	Panic(error)
 }
@@ -21,8 +21,8 @@ func (l *appLogger) Info(msg string) {
 	l.logger.Info().Msg(msg)
 }
 
-func (l *appLogger) Error(err error) {
-	l.logger.Error().Msg(err.Error())
+func (l *appLogger) Error(message string, err error) {
+	l.logger.Error().Err(err).Msg(message)
 }
 
 func (l *appLogger) Debug(msg string) {
@@ -30,7 +30,7 @@ func (l *appLogger) Debug(msg string) {
 }
 
 func (l *appLogger) Panic(err error) {
-	l.Error(err)
+	l.Error("Panic error", err)
 	l.logger.Panic().Msg(err.Error())
 }
 
